@@ -47,11 +47,19 @@ pip install -r requirements.txt
 Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
 
 ```
-# e.g.:
-# Daily plan for Biscuit (Golden Retriever):
-#   08:00 — Morning walk (30 min) [priority: high]
-#   09:00 — Feeding (10 min) [priority: high]
-#   ...
+Today's Schedule
+Daily Plan for Biscuit, Whiskers
+================================
+Available window: 08:00 - 16:00
+
+Time              Task                         Pet          Pri
+----------------- ---------------------------- ------------ ---
+08:00 - 08:30     Morning walk                 Biscuit      9
+08:35 - 08:45     Feeding                      Biscuit      9
+08:50 - 09:00     Feeding                      Whiskers     9
+09:05 - 09:35     Evening walk                 Biscuit      8
+09:40 - 10:00     Playtime                     Whiskers     8
+10:05 - 10:10     Litter box cleaning          Whiskers     7
 ```
 
 ## 🧪 Testing PawPal+
@@ -67,7 +75,10 @@ pytest --cov
 Sample test output:
 
 ```
-# Paste your pytest output here
+tests\test_pawpal.py ..                                                                                                                                   [100%]
+
+====================================================================== 2 passed in 0.05s =======================================================================
+
 ```
 
 ## 📐 Smarter Scheduling
@@ -76,10 +87,10 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting | Scheduler.sort_tasks_by_preferred_time(), Scheduler.sort_schedule_by_time() | Sorts tasks by preferred time and orders the final schedule by start time. |
+| Filtering | Scheduler.filter_tasks(), Scheduler.get_tasks_by_pet_name(), Scheduler.get_tasks_by_completion() | Filters tasks by pet name and/or completion status. |
+| Conflict handling | Scheduler.detect_conflicts(), Scheduler.has_time_conflict(), Scheduler.schedule_task_with_warning() | Detects overlapping time slots and prevents conflicting placements. |
+| Recurring tasks | Task.is_recurring(), Task.mark_complete(), Scheduler.complete_task() | Supports recurring tasks such as daily or weekly and creates the next instance after completion. |
 
 ## 📸 Demo Walkthrough
 

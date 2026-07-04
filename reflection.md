@@ -89,8 +89,9 @@ So the scheduler would generate a valid daily plan that respects the constraints
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
+I am confident 5 stars
 - What edge cases would you test next if you had more time?
-
+I would test edge cases such as tasks that have the same preferred time, tasks that have a duration longer than the available time window, and tasks that have a priority of 0 or negative values. I would also test the scheduler's behavior when there are no tasks to schedule or when all tasks are completed.
 ---
 
 ## 5. Reflection
@@ -98,11 +99,14 @@ So the scheduler would generate a valid daily plan that respects the constraints
 **a. What went well**
 
 - What part of this project are you most satisfied with?
+The scheduling logic is pretty good and it generated a realistic daily plan for the pet owner. The AI was very helpful in generating ideas and code snippets, which saved a lot of time and effort.
 
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
+I would improve the user interface to make it more user-friendly and intuitive. I would also add more features such as the ability to set reminders for tasks, and to view the schedule in a calendar format.
 
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+Having an AI assistant can be very helpful in generating ideas and code snippets, but it is important to critically evaluate the suggestions and make sure they fit the specific needs of the project.

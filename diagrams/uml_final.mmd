@@ -1,0 +1,76 @@
+```mermaid
+classDiagram
+    class OwnerPreferences {
+        +prefer_morning_walks: bool
+        +max_tasks_per_day: int
+        +min_break_between_tasks: int
+        +preferred_start_time: int
+        +to_dict() dict
+    }
+
+    class Owner {
+        +name: str
+        +preferences: OwnerPreferences
+        +time_available: int
+        +pets: List[Pet]
+        +add_pet(pet)
+        +update_preferences(**kwargs)
+    }
+
+    class Pet {
+        +name: str
+        +owner: Owner
+        +tasks: List[Task]
+        +add_pet(name) Pet
+        +add_task(task)
+    }
+
+    class Task {
+        +name: str
+        +duration: int
+        +priority: int
+        +pet: Pet
+        +completed: bool
+        +preferred_time: Optional[str]
+        +recurrence: Optional[str]
+        +due_date: Optional[date]
+        +add_task(...) Task
+        +mark_complete() Optional[Task]
+        +is_recurring: bool
+        +needs_scheduling(today) bool
+    }
+
+    class ScheduledTask {
+        +start_time: int
+        +task: Task
+        +end_time: int
+        +get_time_range() str
+    }
+
+    class Scheduler {
+        +owner: Owner
+        +scheduled_tasks: List[ScheduledTask]
+        +add_task_to_pet(...)
+        +get_all_tasks() List[Task]
+        +filter_tasks(...)
+        +sort_tasks_by_preferred_time(tasks) List[Task]
+        +complete_task(task) Optional[Task]
+        +schedule_task(task, start_time) Optional[ScheduledTask]
+        +schedule_task_with_warning(...)
+        +detect_conflicts() List[str]
+        +generate_daily_plan() List[ScheduledTask]
+        +find_next_available_slot(duration, earliest_start) Optional[int]
+        +has_time_conflict(start_time, duration) bool
+        +get_daily_plan_summary() str
+        +sort_schedule_by_time() List[ScheduledTask]
+    }
+
+    Owner --> OwnerPreferences : has
+    Owner *-- "0..*" Pet : owns
+    Pet *-- "0..*" Task : contains
+    Task --> Pet : belongs to
+    Scheduler --> Owner : uses
+    Scheduler *-- "0..*" ScheduledTask : creates
+    ScheduledTask --> Task : wraps
+    Task ..> Task : creates next recurring instance
+```

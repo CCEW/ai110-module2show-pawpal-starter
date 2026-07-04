@@ -44,7 +44,6 @@ pip install -r requirements.txt
 
 ## 🖥️ Sample Output
 
-Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
 
 ```
 Today's Schedule
@@ -88,14 +87,56 @@ tests\test_pawpal.py ..                                                         
 | Conflict handling | Scheduler.detect_conflicts(), Scheduler.has_time_conflict(), Scheduler.schedule_task_with_warning() | Detects overlapping time slots and prevents conflicting placements. |
 | Recurring tasks | Task.is_recurring(), Task.mark_complete(), Scheduler.complete_task() | Supports recurring tasks such as daily or weekly and creates the next instance after completion. |
 
+### Features
+
+- Sorting by time: tasks are ordered by preferred time using Scheduler.sort_tasks_by_preferred_time() and the final plan is sorted chronologically with Scheduler.sort_schedule_by_time().
+- Filtering by pet or status: the scheduler can show tasks for a specific pet or only pending/completed tasks with Scheduler.filter_tasks().
+- Conflict warnings: overlapping tasks are detected with Scheduler.detect_conflicts() and Scheduler.has_time_conflict(), and the UI warns the owner when a schedule would overlap.
+- Daily recurrence: recurring tasks can be marked complete and will generate the next instance for the following day with Task.mark_complete().
+- Daily plan generation: Scheduler.generate_daily_plan() builds a practical schedule by prioritizing higher-value tasks and respecting the owner’s available window.
+
 ## 📸 Demo Walkthrough
 
-Describe your app in numbered steps so a reader can follow along without watching a video:
+The PawPal+ app lets an owner manage pet care tasks and preview a realistic daily plan in a few simple steps:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Open the Streamlit app and enter the owner name, pet name, and a few care tasks such as a walk, feeding, or grooming.
+2. Add tasks with a duration, priority, and optional preferred time. The task list is filtered for the selected pet and sorted by preferred time.
+3. Click “Generate schedule” to create a daily plan. The scheduler orders tasks by importance and time preferences, then places them into the available window.
+4. Review the generated schedule and any conflict warnings. If two tasks overlap, the app explains the conflict and suggests changing the task time or availability.
+5. Use the built-in conflict adjustment option to change a task’s preferred time and regenerate the plan until it fits the day smoothly.
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
+The scheduler also demonstrates key behaviors in the CLI demo by showing sorting, filtering, conflict detection, and daily plan generation.
+
+```text
+$ python main.py
+Total tasks: 6
+  - Evening walk (Biscuit) [18:00] 30 min, priority 8, done
+  - Morning feeding (Biscuit) [08:15] 10 min, priority 9, pending
+  - Afternoon brushing (Biscuit) [15:30] 15 min, priority 6, pending
+  - Midday play (Whiskers) [12:00] 20 min, priority 8, pending
+  - Litter box cleaning (Whiskers) [09:45] 5 min, priority 7, pending
+  - Evening feeding (Whiskers) [19:00] 10 min, priority 9, pending
+
+Tasks sorted by preferred time:
+  - 08:15 Morning feeding (Biscuit)
+  - 09:45 Litter box cleaning (Whiskers)
+  - 12:00 Midday play (Whiskers)
+  - 15:30 Afternoon brushing (Biscuit)
+  - 18:00 Evening walk (Biscuit)
+  - 19:00 Evening feeding (Whiskers)
+
+Warning:
+Conflict detected: 'Conflicting bath' for 'Whiskers' overlaps an existing scheduled task at 08:00.
+
+Today's Schedule
+Daily Plan for Biscuit, Whiskers
+================================
+Available window: 08:00 - 16:00
+
+Time              Task                         Pet          Pri
+----------------- ---------------------------- ------------ ---
+08:00 - 08:10     Morning feeding              Biscuit      9
+08:15 - 08:25     Evening feeding              Whiskers     9
+08:30 - 08:50     Midday play                  Whiskers     8
+08:55 - 09:00     Litter box cleaning          Whiskers     7
+09:05 - 09:20     Afternoon brushing           Biscuit      6

@@ -93,9 +93,22 @@ if st.button("Add task"):
     else:
         st.warning(f"Task '{task_title}' already exists")
 
-if st.session_state.tasks:
-    st.write("Current tasks:")
-    st.table(st.session_state.tasks)
+pending_tasks = scheduler.filter_tasks(pet_name=pet.name, completed=False)
+sorted_pending_tasks = scheduler.sort_tasks_by_preferred_time(pending_tasks)
+
+if sorted_pending_tasks:
+    st.write("Current tasks for this pet:")
+    task_rows = [
+        {
+            "Task": task.name,
+            "Duration": f"{task.duration} min",
+            "Priority": task.priority,
+            "Preferred time": task.preferred_time or "Any time",
+            "Status": "Completed" if task.completed else "Pending",
+        }
+        for task in sorted_pending_tasks
+    ]
+    st.dataframe(task_rows, use_container_width=True)
 else:
     st.info("No tasks yet. Add one above.")
 
@@ -136,6 +149,42 @@ if st.button("Generate schedule", type="primary"):
         
         if plan:
             st.success("Schedule generated!")
+
+            conflicts = scheduler.detect_conflicts()
+            if conflicts:
+                st.warning(
+                    "A few tasks overlap. You can change a task's preferred time or increase your available window to make the plan more realistic."
+                )
+                for conflict in conflicts:
+                    st.caption(f"• {conflict}")
+
+                scheduled_options = {f"{scheduled.task.name} ({scheduled.get_time_range()})": scheduled for scheduled in plan}
+                selected_schedule_label = st.selectbox(
+                    "Adjust a scheduled task",
+                    options=list(scheduled_options.keys()),
+                    key="conflict_task_selector"
+                )
+                selected_scheduled = scheduled_options[selected_schedule_label]
+                new_preferred_time = st.text_input(
+                    "New preferred time (HH:MM)",
+                    value=selected_scheduled.task.preferred_time or "12:00",
+                    key="conflict_preferred_time"
+                )
+
+                if st.button("Update preferred time and regenerate"):
+                    if new_preferred_time:
+                        selected_scheduled.task.preferred_time = new_preferred_time
+                        plan = scheduler.generate_daily_plan()
+                        conflicts = scheduler.detect_conflicts()
+                        if conflicts:
+                            st.warning("The updated plan still has conflicts. Try a different time or a larger available window.")
+                        else:
+                            st.success("The plan was regenerated without conflicts.")
+                    else:
+                        st.warning("Please enter a preferred time in HH:MM format.")
+            else:
+                st.info("No time conflicts detected in the generated plan.")
+
             st.code(scheduler.get_daily_plan_summary(), language="text")
             
             # Display as a table for readability
@@ -163,4 +212,4 @@ if st.button("Generate schedule", type="primary"):
             with col3:
                 st.metric("Utilization", f"{(total_time / owner.time_available * 100):.1f}%")
         else:
-            st.warning("Could not generate schedule. Check task duration and available time.")
+            st.warning("Could not generate schedule. Consider shortening task durations, increasing your available time, or moving a task to another time.")

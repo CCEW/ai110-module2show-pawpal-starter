@@ -74,7 +74,7 @@ I found error prompts and specific questions about how to implement certain feat
 - Describe one moment where you did not accept an AI suggestion as-is.
 To create the ScheduledTask dataclass, I initially asked the AI to create a class that would hold the task and its start and end times. The AI suggested a simple class with just those fields, but I realized that I also needed to include a method to check for time conflicts between scheduled tasks. I added that method myself after reviewing the AI's suggestion.
 - How did you evaluate or verify what the AI suggested?
-I run tests to verify that the AI's suggestions worked as expected.
+I run tests to verify that the AI's suggestions worked as expected. Explicitly telling the AI of the edge cases I wanted to test.
 ---
 
 ## 4. Testing and Verification

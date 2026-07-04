@@ -65,19 +65,15 @@ Time              Task                         Pet          Pri
 ## 🧪 Testing PawPal+
 
 ```bash
-# Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+pytest -q
 ```
-
+Confidence level 5 stars: ⭐⭐⭐⭐⭐
 Sample test output:
 
 ```
 tests\test_pawpal.py ..                                                                                                                                   [100%]
 
-====================================================================== 2 passed in 0.05s =======================================================================
+====================================================================== 6 passed in 0.07s =======================================================================
 
 ```
 
